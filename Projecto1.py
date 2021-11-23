@@ -3,6 +3,8 @@ class Node:
     def __init__(self, data): 
         self.data = data
         self.num = 0
+        self.expenses = 0
+        self.income = 0
         self.next = None 
         
 class Stack:
@@ -55,20 +57,21 @@ class LinkedList:
     def print(self):                
         i = self.head
         while i != None:
-            print(i.data, end=" ")
+            print("Nombre: " + str(i.data) + " Inventario: " + str(i.num) + " Costo: " + str(i.expenses) + " Ingresos:" + str(i.income))
             i = i.next
         print()
-        
+
+#Elimina el objeto si este existe, falta considerar los elementos en inventario:        
     def delete(self, key):
         curr = self.head
         prev = None
-        if curr == None:
+        if curr.data == None:
             return
         if curr != None and curr.data == key:
             self.head = curr.next
             return self.delete(key);
         
-        while curr!= self.tail:
+        while curr!= self.tail and curr.next!= None:
             if curr.data != key:
                 prev = curr
                 curr = curr.next
@@ -79,115 +82,146 @@ class LinkedList:
         
         if curr == self.tail and curr == key:
             self.tail = prev
-            self.tail.next = None        
-                     
+            self.tail.next = None    
+        else:
+            print("El elemento no existe")
+    
+#Busca el producto y devuelve sus atributos                 
     def search(self,key):
         curr = self.head
         while curr:
             if curr.data == key:
-                print(curr.data, curr.num)
+                print("Nombre: " + str(curr.data) + " Inventario: " + str(curr.num) + " Costo: " + str(curr.expenses) + " Ingreso: " + str(curr. income))
                 return
-                
-    def update(self,key,num):
+            
+#Busca el nombre como clave y modifica los atributos                  
+    def buy(self,key,num, price):
+        if num <= 0:
+            return print("El numero de elementos no es posible")
+        if price <= 0:
+            return print("El precio de compra no es posible")
         curr = self.head
         if curr == None:
             return print("El elemento no existe")            
         while curr:
             if curr.data == key:
-                if num >= curr.num:
-                    curr.num = curr.num + num
-                    return               
+                curr.num = curr.num + num
+                curr.expenses = curr.expenses + price
+                return
+            else:
+                curr = curr.next               
         return print("la operacion no es posible")
-        
+
+#Busca el nombre como clave y modifica los atributos        
+    def sell(self,key,num,price):
+        if num <= 0:
+            return print("El numero de elementos no es posible")
+        if price <= 0:
+            return print("El precio de compra no es posible")        
+        curr = self.head
+        if curr == None:
+            return print("El elemento no existe")            
+        while curr:
+            if curr.data == key:
+                if num <= curr.num:
+                    curr.num = curr.num - num
+                    curr.income = curr.income + price
+                    return
+                else:
+                    return print("No hay suficientes elementos en inventario, la operacion no es posible")                    
+            else:
+                curr = curr.next               
+        return print("la operacion no es posible")            
                 
 #Agrega elemento teniendo en cuenta la unicidad               
     def add(self,key):
         nodo = Node(key)
         curr = self.head        
         if curr == None:
-            self.head = Node(key)
-            self.tail = Node(key)       
-        while curr:
+            self.head = nodo
+            self.tail = nodo
+            return       
+        while curr != self.tail:
             if curr.data != key:
                 curr = curr.next                
-            else:
+            elif curr.data == key:
                 print("el elemento ya existe, no se agrego")
-                return    
-        self.tail.next = nodo
+                return       
+        curr.next = nodo
+        self.tail = nodo
         print("La operacion se realizo con exito")                            
-            
-#Agrega elemento inicio       
-    def PushFront(self, key):
-        nodo = Node(key)
-        if not self.isEmpty():
-            self.head = nodo
-            self.tail = nodo
-        else:
-            nodo.next = self.head
-            self.head = nodo      
+        
 
-#Agrega elemento al final            
-    def PushBack(self, key):
-        nodo = Node(key)
-        if not self.isEmpty():
-            self.head = nodo
-            self.tail = nodo
-        else:
-            self.tail.next = nodo                
-            self.tail = nodo
-
-#Elimina elemento al inicio               
-    def PopFront(self):
-        curr = self.head
-        curr = curr.next
-        self.head = curr        
-
-#Elimina elemento al final                
-    def PopBack(self):
-        curr = self.head
-        prev = None
-        while curr != self.tail:
-            prev = curr
-            curr = curr.next
-        if curr == self.tail:
-            prev.next = None
-            self.tail = prev
-            
-user = True
-Li = LinkedList()
-queue = Queue()
-stack = Stack()
-while user == True:
-    print("1 agregar")
-    print("2 eliminar")
-    print("3 actualizar elemento")   
-    print("4 buscar elemento")
-    print("5 mostrar elementos")
-    print("Inserte operacion a realizar")
-    operation = int(input())
+#Switch Case para operacion
+def Operation(operation, Li):
+    
     if operation == 1:
         print("Inserte Nombre")
         name = input()
         Li.add(name)
+                        
     elif operation == 2:
         print("Inserte Nombre")
         name = input()
         Li.delete(name) 
+            
     elif operation == 3:
         print("Inserte Nombre")
         name = input()
-        print("Inserte numero de elementos") 
-        sum = int(input())
-        Li.update(name, sum)   
+        try:
+            print("Inserte numero de elementos comprados") 
+            sum = int(input())
+            print("Inserte costo")
+            price = int(input())
+            Li.buy(name, sum, price)
+        except ValueError:
+            print("Error, ha ingresado una cadena de caracteres")
+            
     elif operation == 4:
         print("Inserte Nombre")
         name = input()
-        Li.search(name)
+        try:
+            print("Inserte numero de elementos vendidos") 
+            sum = int(input())
+            print("Inserte ingreso")
+            price = int(input())
+            Li.sell(name, sum, price)
+        except ValueError:
+            print("Error, ha ingresado una cadena de caracteres")     
+                        
     elif operation == 5:
+        print("Inserte Nombre")
+        name = input()
+        Li.search(name)
+            
+    elif operation == 6:
         Li.print()
+            
     else:
-        print("Ha ingresado un valor erroneo")        
-    print("Si desea realizar otra operacion, ingrese 1, para salir presione 2")
+        print("Ha ingresado un valor erroneo")
+    
+    
+            
+user = True
+li = LinkedList()
+queue = Queue()
+stack = Stack()
+
+while user == True:
+    print("1 agregar")
+    print("2 eliminar")
+    print("3 comprar")
+    print("4 vender")   
+    print("5 buscar elemento")
+    print("6 mostrar elementos")
+    print("Inserte operacion a realizar")
+    op = input()
+    try:
+        op = int(op)
+        Operation(op,li)      
+    except:
+        print("Error, no ha ingresado un numero")   
+    print("Si desea realizar otra operacion, ingrese 1, para salir presione otro numero")       
     program = int(input())
     if program != 1:
         user = False
