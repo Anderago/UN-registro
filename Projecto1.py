@@ -57,9 +57,34 @@ class LinkedList:
     def print(self):                
         i = self.head
         while i != None:
-            print("Nombre: " + str(i.data) + " Inventario: " + str(i.num) + " Costo: " + str(i.expenses) + " Ingresos:" + str(i.income))
+            print("Nombre: " + str(i.data) + " Inventario: " + str(i.num) + 
+                  " Costo: " + str(i.expenses) + " Ingresos:" + str(i.income) 
+                  + " Beneficios: " + str(i.income-i.expenses))
             i = i.next
         print()
+
+#Agrega elemento teniendo en cuenta la unicidad               
+    def add(self,key):
+        nodo = Node(key)
+        curr = self.head        
+        if curr == None:
+            self.head = nodo
+            self.tail = nodo
+            return       
+        while curr.next != None:
+            if curr.data != key:
+                curr = curr.next                
+            elif curr.data == key:
+                print("el elemento ya existe, no se agrego")
+                return
+        if curr.data == key:  
+            print("el elemento ya existe, no se agrego")
+            return
+        else:    
+            curr.next = nodo
+            self.tail = nodo
+        print("La operacion se realizo con exito")                            
+        
 
 #Elimina el objeto si este existe, falta considerar los elementos en inventario:        
     def delete(self, key):
@@ -91,7 +116,9 @@ class LinkedList:
         curr = self.head
         while curr:
             if curr.data == key:
-                print("Nombre: " + str(curr.data) + " Inventario: " + str(curr.num) + " Costo: " + str(curr.expenses) + " Ingreso: " + str(curr. income))
+                print("Nombre: " + str(curr.data) + " Inventario: " + str(curr.num) +
+                       " Costo: " + str(curr.expenses) + " Ingreso: " + str(curr. income) + 
+                       " Beneficios: " + str(curr.income-curr.expenses))
                 return
             
 #Busca el nombre como clave y modifica los atributos                  
@@ -133,24 +160,6 @@ class LinkedList:
                 curr = curr.next               
         return print("la operacion no es posible")            
                 
-#Agrega elemento teniendo en cuenta la unicidad               
-    def add(self,key):
-        nodo = Node(key)
-        curr = self.head        
-        if curr == None:
-            self.head = nodo
-            self.tail = nodo
-            return       
-        while curr != self.tail:
-            if curr.data != key:
-                curr = curr.next                
-            elif curr.data == key:
-                print("el elemento ya existe, no se agrego")
-                return       
-        curr.next = nodo
-        self.tail = nodo
-        print("La operacion se realizo con exito")                            
-        
 
 #Switch Case para operacion
 def Operation(operation, Li):
@@ -216,11 +225,11 @@ while user == True:
     print("6 mostrar elementos")
     print("Inserte operacion a realizar")
     op = input()
-    try:
+    if op.isnumeric() == True:
         op = int(op)
-        Operation(op,li)      
-    except:
-        print("Error, no ha ingresado un numero")   
+        Operation(op,li)  
+    else:          
+        print("Error, no ha ingresado un numero")     
     print("Si desea realizar otra operacion, ingrese 1, para salir presione otro numero")       
     program = int(input())
     if program != 1:
