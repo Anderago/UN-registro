@@ -90,24 +90,41 @@ class LinkedList:
     def delete(self, key):
         curr = self.head
         prev = None
-        if curr.data == None:
-            return
+        
+        #Lista vacia
+        if curr == None:
+            return print("la lista esta vacia, no se puede eliminar elementos")
+         
+        #El elemento a borrar es el unico de la lista        
+        if curr.next == None:
+            if curr.data == key:
+                self.head = None
+                self.tail = None
+                return print("El elemento se ha eliminado, la lista esta vacia")
+            else:
+                return print("El elemento no existe")    
+        
+        #El elemento a borrar es la cabeza de la lista
         if curr != None and curr.data == key:
             self.head = curr.next
-            return self.delete(key);
+            return print("El elemento ha sido eliminado con exito")
         
+        #Itera la lista
         while curr!= self.tail and curr.next!= None:
             if curr.data != key:
                 prev = curr
                 curr = curr.next
+            #Borra el elemento    
             else: 
                 curr = curr.next
                 prev.next = curr
-                return
+                return print("El elemento ha sido eliminado con exito")
         
-        if curr == self.tail and curr == key:
+        #El elemento a borrar es la cola
+        if curr == self.tail and curr.data == key:
             self.tail = prev
-            self.tail.next = None    
+            self.tail.next = None
+            print("El elemento ha sido eliminado con exito")    
         else:
             print("El elemento no existe")
     
