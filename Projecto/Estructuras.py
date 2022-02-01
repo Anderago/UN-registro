@@ -1,5 +1,6 @@
 from tkinter import messagebox
 
+#Nodo usuario
 class LinkNode:
     def __init__(self, key, value):
         self.key = key
@@ -15,6 +16,7 @@ class Node:
         self.fecha = None     
         self.next = None
 
+#Nodo articulo
 class TreeNode(object):
     def __init__(self, data):
         self.data = data
