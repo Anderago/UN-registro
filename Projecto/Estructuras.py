@@ -1,5 +1,3 @@
-import time
-from datetime import datetime
 from tkinter import messagebox
 
 class LinkNode:
@@ -466,7 +464,3 @@ class HashTable:
             while node != None:
                 link.PushBack(node.key, node.value)
                 node = node.next        
-
-a = HashTable()
-b = a.hash("el rojo zorro caminando alegremente por el tranvia") 
-print(b)
